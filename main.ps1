@@ -26,4 +26,13 @@ else {
     "Failed to build. Nothing was copied." | Write-Host -ForegroundColor Magenta
 }
 '@ | Out-File -Path "build.ps1"
-New-Item -Path ".env" -ItemType File
+New-Item -Path ".env" -ItemType File -ErrorAction SilentlyContinue
+
+$gi = ".gitignore"
+if (Test-Path $gi) {
+    if (-not (Select-String -Path $gi -Pattern "*.env" -SimpleMatch)) {
+        Write-Output "*.env" | Out-File -FilePath $gi -Append
+    }
+}else {
+    Write-Output "*.env" | Out-File -FilePath $gi
+}
