@@ -32,10 +32,15 @@ else {
 New-Item -Path ".env" -ItemType File -ErrorAction SilentlyContinue
 
 $gi = ".gitignore"
+$lines = @("*.env", "*.exe")
 if (Test-Path $gi) {
-    if (-not (Select-String -Path $gi -Pattern "*.env" -SimpleMatch)) {
-        Write-Output "*.env" | Out-File -FilePath $gi -Append
+    $lines | ForEach-Object {
+        $p = $_
+        if (-not (Select-String -Path $gi -Pattern $p -SimpleMatch)) {
+            Write-Output $p | Out-File -FilePath $gi -Append
+        }
     }
-}else {
-    Write-Output "*.env" | Out-File -FilePath $gi
+}
+else {
+    $lines | Out-File -FilePath $gi
 }
