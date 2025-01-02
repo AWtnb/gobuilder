@@ -3,8 +3,8 @@ go build
 
 if ($LASTEXITCODE -eq 0) {
     if (Test-Path .\.env) {
-        $d = (Get-Content .\.env -Raw).Trim()
-        if ($d.Length -lt 1) {
+        $d = Get-Content .\.env -Raw
+        if (-not $d -or $d.Trim().Length -lt 1) {
             $d = $env:USERPROFILE | Join-Path -ChildPath "tools\bin"
         }
         $d = [System.Environment]::ExpandEnvironmentVariables($d)
